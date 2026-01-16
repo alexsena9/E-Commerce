@@ -3,3 +3,31 @@ body {
   color: #212529;
   font-family: "Inter", sans-serif;
 }
+
+.hover-card {
+  transition: transform 0.3s ease, shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-8px);
+}
+
+.img-zoom-container {
+  overflow: hidden;
+}
+
+.img-zoom-container img {
+  transition: transform 0.5s ease;
+}
+
+.hover-card:hover .img-zoom-container img {
+  transform: scale(1.1);
+}
+
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.15);
+}

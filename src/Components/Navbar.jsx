@@ -18,7 +18,7 @@ const Navbar = ({ cuentaCarrito }) => {
             <User className="text-muted cursor-pointer" size={20} />
 
             <button
-              className="btn btn-dark rounded-pill px-4 d-flex align-items-center gap-2"
+              className="btn btn-dark rounded-pill px-4 d-flex align-items-center gap-2 hover-scale"
               data-bs-toggle="offcanvas"
               data-bs-target="#cartOffcanvas"
             >

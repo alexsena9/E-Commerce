@@ -4,8 +4,8 @@ import { Plus } from "lucide-react";
 const ProductCard = ({ producto, onAgregar }) => {
   return (
     <div className="col">
-      <div className="card h-100 border-0 bg-transparent shadow-none">
-        <div className="position-relative overflow-hidden rounded-4 bg-light">
+      <div className="card h-100 border-0 bg-transparent shadow-none hover-card">
+        <div className="position-relative img-zoom-container rounded-4 bg-light">
           <img
             src={producto.imagen}
             className="card-img-top"
@@ -21,10 +21,18 @@ const ProductCard = ({ producto, onAgregar }) => {
           </button>
         </div>
 
-        <div className="card-body px-0 pt-2 text-center">
-          <h6 className="fw-bold text-dark mb-1" style={{ fontSize: "0.9rem" }}>
-            {producto.nombre}
-          </h6>
+        <div className="card-body px-0 pt-3 text-center">
+          <p
+            className="text-muted mb-1"
+            style={{
+              fontSize: "0.75rem",
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+            }}
+          >
+            {producto.categoria}
+          </p>
+          <h6 className="fw-bold text-dark mb-1">{producto.nombre}</h6>
           <p className="fw-bold text-primary mb-0">${producto.precio}</p>
         </div>
       </div>
