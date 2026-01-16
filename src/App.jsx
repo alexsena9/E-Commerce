@@ -9,10 +9,6 @@ function App() {
 
   const agregarAlCarrito = (producto) => {
     setCarrito([...carrito, producto]);
-  };
-
-  const agregarAlCarrito = (producto) => {
-    setCarrito([...carrito, producto]);
 
     console.log(`¡${producto.nombre} añadido!`);
   };
