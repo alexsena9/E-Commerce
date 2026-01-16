@@ -1,89 +1,104 @@
 import React from "react";
-import { X, ShoppingBag, Send } from "lucide-react";
+import "./Cart.css";
 
-const Cart = ({ items, onRemove, onFinalizar }) => {
-  const total = items.reduce((acc, item) => acc + item.precio, 0);
+const Cart = ({ cart, setCart, totalCarrito }) => {
+  const aumentarCantidad = (id) => {
+    setCart(
+      cart.map((item) =>
+        item.id === id ? { ...item, cantidad: item.cantidad + 1 } : item
+      )
+    );
+  };
+
+  const disminuirCantidad = (id) => {
+    setCart(
+      cart.map((item) =>
+        item.id === id && item.cantidad > 1
+          ? { ...item, cantidad: item.cantidad - 1 }
+          : item
+      )
+    );
+  };
+
+  const eliminarDelCarrito = (id) => {
+    setCart(cart.filter((item) => item.id !== id));
+  };
+
+  const enviarWhatsApp = () => {
+    if (cart.length === 0) return alert("El carrito está vacío");
+
+    const mensajeBase = "¡Hola! Quiero realizar el siguiente pedido:\n\n";
+    const productosMsg = cart
+      .map(
+        (p) =>
+          `- ${p.nombre} (x${p.cantidad}): $${(
+            p.precio * p.cantidad
+          ).toLocaleString()}`
+      )
+      .join("\n");
+    const totalMsg = `\n\n*Total a pagar: $${totalCarrito.toLocaleString()}*`;
+
+    const url = `https://wa.me/5491100000000?text=${encodeURIComponent(
+      mensajeBase + productosMsg + totalMsg
+    )}`;
+    window.open(url, "_blank");
+  };
 
   return (
-    <div
-      className="offcanvas offcanvas-end border-0 shadow-lg"
-      tabIndex="-1"
-      id="cartOffcanvas"
-      style={{ borderRadius: "2rem 0 0 2rem" }}
-    >
-      <div className="offcanvas-header border-bottom p-4">
-        <h5 className="fw-bold m-0">TU CARRITO</h5>
-        <button
-          type="button"
-          className="btn-close"
-          data-bs-dismiss="offcanvas"
-        ></button>
-      </div>
+    <div className="cart-container">
+      <h2>Tu Carrito</h2>
 
-      <div className="offcanvas-body p-4 d-flex flex-column">
-        {items.length === 0 ? (
-          <div className="h-100 d-flex flex-column align-items-center justify-content-center text-center animate-fade-up">
-            <div className="mb-4 opacity-10">
-              <ShoppingBag size={100} strokeWidth={1} />
-            </div>
-            <h5 className="fw-bold">Tu carrito está vacío</h5>
-            <p className="text-muted small px-3">
-              Encuentra los mejores productos tecnológicos en nuestra tienda.
-            </p>
-            <button
-              className="btn btn-dark mt-3 rounded-pill px-4"
-              data-bs-dismiss="offcanvas"
-            >
-              EMPEZAR A COMPRAR
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="flex-grow-1 overflow-auto">
-              {items.map((item, index) => (
-                <div
-                  key={index}
-                  className="d-flex align-items-center mb-4 p-2 bg-light rounded-4 animate-fade-up"
-                >
-                  <img
-                    src={item.imagen}
-                    alt={item.nombre}
-                    className="rounded-3 shadow-sm"
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <div className="ms-3 flex-grow-1">
-                    <h6 className="mb-0 small fw-bold">{item.nombre}</h6>
-                    <p className="mb-0 smaller text-muted">${item.precio}</p>
+      {cart.length === 0 ? (
+        <p>El carrito está vacío</p>
+      ) : (
+        <>
+          <div className="cart-items">
+            {cart.map((item) => (
+              <div key={item.id} className="cart-item">
+                <img src={item.imagen} alt={item.nombre} />
+                <div className="item-details">
+                  <h4>{item.nombre}</h4>
+                  <p>${item.precio.toLocaleString()}</p>
+                  <div className="quantity-controls">
+                    <button onClick={() => disminuirCantidad(item.id)}>
+                      -
+                    </button>
+                    <span>{item.cantidad}</span>
+                    <button onClick={() => aumentarCantidad(item.id)}>+</button>
                   </div>
-                  <button
-                    onClick={() => onRemove(index)}
-                    className="btn btn-sm btn-white rounded-circle shadow-sm border-0"
-                  >
-                    <X size={14} />
-                  </button>
                 </div>
-              ))}
-            </div>
-
-            <div className="mt-auto border-top pt-4">
-              <div className="d-flex justify-content-between mb-4">
-                <span className="fw-bold text-muted">TOTAL</span>
-                <span className="fw-bold h4 mb-0">${total}</span>
+                <button
+                  className="btn-eliminar"
+                  onClick={() => eliminarDelCarrito(item.id)}
+                >
+                  🗑️
+                </button>
               </div>
+            ))}
+          </div>
+
+          <div className="cart-footer">
+            <h3>Total: ${totalCarrito.toLocaleString()}</h3>
+
+            <div className="cart-actions">
+              <button className="btn-whatsapp" onClick={enviarWhatsApp}>
+                Enviar pedido por WhatsApp
+              </button>
+
               <button
-                className="btn btn-dark w-100 d-flex align-items-center justify-content-center gap-2 py-3 rounded-4 shadow"
-                onClick={onFinalizar}
+                className="btn-card"
+                onClick={() => alert("Redirigiendo a pasarela de pago...")}
               >
-                <Send size={18} /> FINALIZAR COMPRA
+                Pagar con Tarjeta
+              </button>
+
+              <button className="btn-vaciar" onClick={() => setCart([])}>
+                Vaciar Carrito
               </button>
             </div>
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
