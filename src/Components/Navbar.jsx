@@ -1,36 +1,107 @@
 import React from "react";
-import { ShoppingCart, Store, User } from "lucide-react";
+import { ShoppingCart, Store, User, Search } from "lucide-react";
 
-const Navbar = ({ cuentaCarrito }) => {
+const Navbar = ({
+  cuentaCarrito,
+  busqueda,
+  setBusqueda,
+  productosSugeridos,
+  onAgregar,
+}) => {
   return (
-    <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3 shadow-sm">
-        <div className="container">
-          <a
-            className="navbar-brand d-flex align-items-center fw-bold"
-            href="#"
-          >
-            <Store className="me-2 text-primary" size={24} />
-            ALEXIS<span className="text-muted fw-light">STUDIO</span>
-          </a>
+    <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3 shadow-sm">
+      <div className="container">
+        <a
+          className="navbar-brand d-flex align-items-center fw-bold"
+          href="#"
+          onClick={() => window.location.reload()}
+        >
+          <Store className="me-2 text-primary" size={24} />
+          ALEXIS<span className="text-muted fw-light">STUDIO</span>
+        </a>
 
-          <div className="d-flex align-items-center gap-3">
-            <User className="text-muted cursor-pointer" size={20} />
-
-            <button
-              className="btn btn-dark rounded-pill px-4 d-flex align-items-center gap-2 hover-scale"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#cartOffcanvas"
-            >
-              <ShoppingCart size={18} />
-              <span className="badge bg-white text-dark rounded-circle">
-                {cuentaCarrito}
-              </span>
-            </button>
+        <div
+          className="flex-grow-1 mx-4 d-none d-md-block position-relative"
+          style={{ maxWidth: "400px" }}
+        >
+          <div className="position-relative">
+            <Search
+              className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+              size={18}
+            />
+            <input
+              type="text"
+              className="form-control rounded-pill ps-5 bg-light border-0"
+              placeholder="Buscar productos..."
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+            />
           </div>
+
+          {busqueda.length > 0 && (
+            <div
+              className="position-absolute w-100 bg-white shadow-lg rounded-4 mt-2 overflow-hidden border"
+              style={{ zIndex: 1000 }}
+            >
+              {productosSugeridos.length > 0 ? (
+                productosSugeridos.slice(0, 5).map((p) => (
+                  <div
+                    key={p.id}
+                    className="d-flex align-items-center p-2 border-bottom hover-bg-light cursor-pointer"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      onAgregar(p);
+                      setBusqueda("");
+                    }}
+                  >
+                    <img
+                      src={p.imagen}
+                      alt={p.nombre}
+                      className="rounded"
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <div className="ms-3">
+                      <p className="mb-0 small fw-bold text-dark">{p.nombre}</p>
+                      <p className="mb-0 small text-primary">${p.precio}</p>
+                    </div>
+                    <button className="btn btn-sm btn-dark rounded-circle ms-auto">
+                      +
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="p-3 text-center small text-muted">
+                  No hay resultados
+                </div>
+              )}
+              {productosSugeridos.length > 0 && (
+                <div className="p-2 bg-light text-center small text-muted border-top">
+                  Presiona Enter para ver todos los resultados
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      </nav>
-    </>
+
+        <div className="d-flex align-items-center gap-3">
+          <User className="text-muted d-none d-sm-block" size={20} />
+          <button
+            className="btn btn-dark rounded-pill px-4 d-flex align-items-center gap-2"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#cartOffcanvas"
+          >
+            <ShoppingCart size={18} />
+            <span className="badge bg-white text-dark rounded-circle">
+              {cuentaCarrito}
+            </span>
+          </button>
+        </div>
+      </div>
+    </nav>
   );
 };
 
