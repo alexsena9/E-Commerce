@@ -1,11 +1,15 @@
 import React from "react";
 import { Plus } from "lucide-react";
 
-const ProductCard = ({ producto, onAgregar }) => {
+const ProductCard = ({ producto, onAgregar, onVerDetalle }) => {
   return (
     <div className="col">
       <div className="card h-100 border-0 bg-transparent shadow-none hover-card">
-        <div className="position-relative img-zoom-container rounded-4 bg-light">
+        <div
+          className="position-relative img-zoom-container rounded-4 bg-light overflow-hidden"
+          style={{ cursor: "pointer" }}
+          onClick={() => onVerDetalle(producto)}
+        >
           <img
             src={producto.imagen}
             className="card-img-top"
@@ -14,7 +18,10 @@ const ProductCard = ({ producto, onAgregar }) => {
           />
 
           <button
-            onClick={() => onAgregar(producto)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onAgregar(producto);
+            }}
             className="btn btn-white bg-white position-absolute bottom-0 end-0 m-2 shadow-sm rounded-circle p-2 border hover-scale"
           >
             <Plus size={18} className="text-dark" />
@@ -24,11 +31,7 @@ const ProductCard = ({ producto, onAgregar }) => {
         <div className="card-body px-0 pt-3 text-center">
           <p
             className="text-muted mb-1"
-            style={{
-              fontSize: "0.75rem",
-              textTransform: "uppercase",
-              letterSpacing: "1px",
-            }}
+            style={{ fontSize: "0.75rem", textTransform: "uppercase" }}
           >
             {producto.categoria}
           </p>

@@ -6,15 +6,18 @@ const Navbar = ({
   busqueda,
   setBusqueda,
   productosSugeridos,
-  onAgregar,
+  onSeleccionarSugerencia,
 }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3 shadow-sm">
       <div className="container">
         <a
           className="navbar-brand d-flex align-items-center fw-bold"
-          href="#"
-          onClick={() => window.location.reload()}
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.reload();
+          }}
         >
           <Store className="me-2 text-primary" size={24} />
           ALEXIS<span className="text-muted fw-light">STUDIO</span>
@@ -41,18 +44,15 @@ const Navbar = ({
           {busqueda.length > 0 && (
             <div
               className="position-absolute w-100 bg-white shadow-lg rounded-4 mt-2 overflow-hidden border"
-              style={{ zIndex: 1000 }}
+              style={{ zIndex: 3000 }}
             >
               {productosSugeridos.length > 0 ? (
                 productosSugeridos.slice(0, 5).map((p) => (
                   <div
                     key={p.id}
-                    className="d-flex align-items-center p-2 border-bottom hover-bg-light cursor-pointer"
+                    className="d-flex align-items-center p-2 border-bottom hover-bg-light"
                     style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      onAgregar(p);
-                      setBusqueda("");
-                    }}
+                    onClick={() => onSeleccionarSugerencia(p)}
                   >
                     <img
                       src={p.imagen}
@@ -68,9 +68,12 @@ const Navbar = ({
                       <p className="mb-0 small fw-bold text-dark">{p.nombre}</p>
                       <p className="mb-0 small text-primary">${p.precio}</p>
                     </div>
-                    <button className="btn btn-sm btn-dark rounded-circle ms-auto">
-                      +
-                    </button>
+                    <div
+                      className="ms-auto text-muted"
+                      style={{ fontSize: "0.7rem" }}
+                    >
+                      Ver detalle
+                    </div>
                   </div>
                 ))
               ) : (
@@ -78,17 +81,11 @@ const Navbar = ({
                   No hay resultados
                 </div>
               )}
-              {productosSugeridos.length > 0 && (
-                <div className="p-2 bg-light text-center small text-muted border-top">
-                  Presiona Enter para ver todos los resultados
-                </div>
-              )}
             </div>
           )}
         </div>
 
         <div className="d-flex align-items-center gap-3">
-          <User className="text-muted d-none d-sm-block" size={20} />
           <button
             className="btn btn-dark rounded-pill px-4 d-flex align-items-center gap-2"
             data-bs-toggle="offcanvas"
