@@ -1,9 +1,16 @@
 import React, { useState } from "react";
-import { Trash2, CreditCard, MessageCircle, ShoppingBag } from "lucide-react";
+import {
+  Trash2,
+  CreditCard,
+  MessageCircle,
+  ShoppingBag,
+  X,
+} from "lucide-react";
 
 const Cart = ({ items = [], onRemove, onFinalizar }) => {
   const [metodoPago, setMetodoPago] = useState("whatsapp");
 
+  // Cálculo del total
   const total = items.reduce((acc, item) => acc + (item?.precio || 0), 0);
 
   const procesarCompra = () => {
@@ -21,7 +28,6 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
       );
 
       window.open(`https://wa.me/${numeroTelefono}?text=${mensaje}`, "_blank");
-
       onFinalizar();
     } else {
       alert("Redirigiendo a pasarela de pago segura...");
@@ -30,7 +36,7 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
       }, 1500);
     }
 
-    const instance = window.bootstrap.Offcanvas.getInstance(
+    const instance = window.bootstrap?.Offcanvas?.getInstance(
       document.getElementById("cartOffcanvas")
     );
     if (instance) instance.hide();
@@ -41,7 +47,7 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
       className="offcanvas offcanvas-end bg-white border-0 shadow"
       tabIndex="-1"
       id="cartOffcanvas"
-      style={{ width: "400px" }}
+      style={{ width: "400px", borderRadius: "2rem 0 0 2rem" }}
     >
       <div className="offcanvas-header border-bottom py-4 px-4">
         <div className="d-flex align-items-center gap-2">
@@ -55,24 +61,31 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
         ></button>
       </div>
 
-      <div className="offcanvas-body p-4">
+      <div className="offcanvas-body p-4 d-flex flex-column">
         {items.length === 0 ? (
-          <div className="text-center mt-5">
-            <p className="text-muted italic">Tu carrito está vacío.</p>
+          <div className="h-100 d-flex flex-column align-items-center justify-content-center text-center animate-fade-up">
+            <div className="mb-4 opacity-10">
+              <ShoppingBag size={100} strokeWidth={1} />
+            </div>
+            <h5 className="fw-bold">Tu carrito está vacío</h5>
+            <p className="text-muted small px-3">
+              Explora nuestra colección y encuentra algo increíble para ti.
+            </p>
             <button
-              className="btn btn-outline-dark btn-sm rounded-pill mt-2"
+              className="btn btn-dark mt-3 rounded-pill px-4 py-2 fw-bold"
               data-bs-dismiss="offcanvas"
+              style={{ letterSpacing: "1px" }}
             >
-              Explorar tienda
+              EMPEZAR A COMPRAR
             </button>
           </div>
         ) : (
           <>
-            <div className="mb-4">
+            <div className="flex-grow-1 overflow-auto mb-4">
               {items.map((item, index) => (
                 <div
                   key={index}
-                  className="d-flex align-items-center mb-3 pb-3 border-bottom border-light"
+                  className="d-flex align-items-center mb-3 pb-3 border-bottom border-light animate-fade-up"
                 >
                   <img
                     src={item?.imagen}
@@ -105,7 +118,11 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
             <div className="bg-light p-3 rounded-4 mb-2">
               <p
                 className="fw-bold mb-3"
-                style={{ fontSize: "0.75rem", letterSpacing: "1px" }}
+                style={{
+                  fontSize: "0.75rem",
+                  letterSpacing: "1px",
+                  opacity: 0.6,
+                }}
               >
                 MÉTODO DE PAGO
               </p>
@@ -159,15 +176,20 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
       {items.length > 0 && (
         <div className="offcanvas-footer p-4 border-top bg-white">
           <div className="d-flex justify-content-between mb-3 px-1">
-            <span className="text-muted fw-bold small">SUBTOTAL</span>
+            <span className="text-muted fw-bold small">TOTAL A PAGAR</span>
             <span className="text-dark fw-black fs-4">${total.toFixed(2)}</span>
           </div>
           <button
             onClick={procesarCompra}
-            className={`btn w-100 py-3 rounded-pill fw-bold shadow transition-all ${
+            className={`btn w-100 py-3 rounded-pill fw-bold shadow transition-all d-flex align-items-center justify-content-center gap-2 ${
               metodoPago === "whatsapp" ? "btn-success" : "btn-dark"
             }`}
           >
+            {metodoPago === "whatsapp" ? (
+              <MessageCircle size={18} />
+            ) : (
+              <CreditCard size={18} />
+            )}
             {metodoPago === "whatsapp"
               ? "CONFIRMAR POR WHATSAPP"
               : "PAGAR AHORA"}
