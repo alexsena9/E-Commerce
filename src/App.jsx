@@ -1,25 +1,29 @@
+import React, { useState } from "react";
 import Navbar from "./components/Navbar";
 import ProductCard from "./components/ProductCard";
 import { productos } from "./productos";
 
 function App() {
+  const [carrito, setCarrito] = useState([]);
+
+  const agregarAlCarrito = (producto) => {
+    setCarrito([...carrito, producto]);
+    console.log("Carrito actualizado:", carrito);
+  };
+
   return (
-    <div className="min-vh-100 bg-black text-white">
-      <Navbar />
+    <div className="min-vh-100 bg-white">
+      <Navbar cuentaCarrito={carrito.length} />
 
       <main className="container pt-5 mt-5">
-        <header className="py-5 text-start">
-          <h1 className="display-3 fw-bold italic">
-            NUEVA <span className="text-info">COLECCIÓN</span>
-          </h1>
-          <p className="lead text-secondary">
-            Tecnología premium seleccionada para ti.
-          </p>
+        <header className="py-5 text-center">
+          <h2 className="fw-light text-dark mb-0">Colección</h2>
+          <h1 className="fw-black text-dark tracking-tighter">MINIMAL</h1>
         </header>
 
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5 pb-5">
+        <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 pb-5">
           {productos.map((p) => (
-            <ProductCard key={p.id} producto={p} />
+            <ProductCard key={p.id} producto={p} onAgregar={agregarAlCarrito} />
           ))}
         </div>
       </main>
