@@ -4,16 +4,29 @@ import ProductCard from "./components/ProductCard";
 import Cart from "./components/Cart";
 import ProductDetail from "./components/ProductDetail";
 import Pagination from "./components/Pagination";
+import Footer from "./components/Footer";
+import { Search } from "lucide-react";
 import { productos } from "./productos";
 
 function App() {
-  const [carrito, setCarrito] = useState([]);
+  const [carrito, setCarrito] = useState(() => {
+    try {
+      const saved = localStorage.getItem("alexis_studio_cart");
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      return [];
+    }
+  });
+
   const [paginaActual, setPaginaActual] = useState(1);
   const [categoriaActiva, setCategoriaActiva] = useState("Todos");
   const [busqueda, setBusqueda] = useState("");
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+  const [compraExitosa, setCompraExitosa] = useState(false);
 
-  const productosPorPagina = 12;
+  useEffect(() => {
+    localStorage.setItem("alexis_studio_cart", JSON.stringify(carrito));
+  }, [carrito]);
 
   const productosSugeridos = productos.filter((p) =>
     p.nombre.toLowerCase().includes(busqueda.toLowerCase())
@@ -23,38 +36,93 @@ function App() {
     (p) => categoriaActiva === "Todos" || p.categoria === categoriaActiva
   );
 
-  const totalPaginas = Math.ceil(
-    productosFiltrados.length / productosPorPagina
-  );
+  const totalPaginas = Math.ceil(productosFiltrados.length / 12);
+
   const productosVisibles = productosFiltrados.slice(
-    (paginaActual - 1) * productosPorPagina,
-    paginaActual * productosPorPagina
+    (paginaActual - 1) * 12,
+    paginaActual * 12
   );
 
-  const agregarAlCarrito = (producto) => setCarrito([...carrito, producto]);
-  const eliminarDelCarrito = (index) =>
-    setCarrito(carrito.filter((_, i) => i !== index));
-
-  const manejarSeleccionBusqueda = (p) => {
-    setProductoSeleccionado(p);
-    setBusqueda("");
+  const agregarAlCarrito = (p) => setCarrito([...carrito, p]);
+  const eliminarDelCarrito = (i) =>
+    setCarrito(carrito.filter((_, idx) => idx !== i));
+  const finalizarCompra = () => {
+    setCompraExitosa(true);
+    setCarrito([]);
+    localStorage.removeItem("alexis_studio_cart");
   };
 
   useEffect(() => {
     setPaginaActual(1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [categoriaActiva, busqueda]);
 
+  if (compraExitosa) {
+    return (
+      <div
+        className="min-vh-100 d-flex align-items-center justify-content-center"
+        style={{ backgroundColor: "#f3f4f6" }}
+      >
+        <div
+          className="premium-card p-5 text-center shadow-lg animate-fade-up"
+          style={{ maxWidth: "450px" }}
+        >
+          <div
+            className="mb-4 d-inline-flex align-items-center justify-content-center rounded-circle bg-light"
+            style={{
+              width: "80px",
+              height: "80px",
+              border: "2px solid #10b981",
+            }}
+          >
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#10b981"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h2 className="fw-bold mb-3">¡PEDIDO RECIBIDO!</h2>
+          <p className="text-muted mb-4">
+            Gracias por tu compra. Nos comunicaremos contigo a la brevedad.
+          </p>
+          <button
+            className="btn-dark-premium w-100"
+            onClick={() => setCompraExitosa(false)}
+          >
+            VOLVER A LA TIENDA
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-vh-100 bg-white">
+    <div
+      className="min-vh-100 d-flex flex-column"
+      style={{ backgroundColor: "#f3f4f6" }}
+    >
       <Navbar
         cuentaCarrito={carrito.length}
         busqueda={busqueda}
         setBusqueda={setBusqueda}
         productosSugeridos={productosSugeridos}
-        onSeleccionarSugerencia={manejarSeleccionBusqueda}
+        onSeleccionarSugerencia={(p) => {
+          setProductoSeleccionado(p);
+          setBusqueda("");
+        }}
       />
-
-      <Cart items={carrito} onRemove={eliminarDelCarrito} />
+      <Cart
+        items={carrito}
+        onRemove={eliminarDelCarrito}
+        onFinalizar={finalizarCompra}
+      />
 
       {productoSeleccionado && (
         <ProductDetail
@@ -64,9 +132,14 @@ function App() {
         />
       )}
 
-      <main className="container pt-5 mt-5">
+      <main className="container pt-5 mt-5 flex-grow-1">
         <header className="py-5 text-center">
-          <h1 className="fw-black text-dark display-5">ALEXIS STUDIO</h1>
+          <h1
+            className="fw-bold text-dark display-5"
+            style={{ letterSpacing: "-2px" }}
+          >
+            ALEXIS<span className="fw-light text-muted">STUDIO</span>
+          </h1>
           <div className="d-flex flex-wrap justify-content-center gap-2 mt-4">
             {[
               "Todos",
@@ -79,8 +152,10 @@ function App() {
               <button
                 key={cat}
                 onClick={() => setCategoriaActiva(cat)}
-                className={`btn rounded-pill px-4 py-2 small fw-bold ${
-                  categoriaActiva === cat ? "btn-dark" : "btn-light"
+                className={`btn rounded-pill px-4 py-2 small fw-bold transition-all border-0 shadow-sm ${
+                  categoriaActiva === cat
+                    ? "btn-dark text-white"
+                    : "bg-white text-muted"
                 }`}
               >
                 {cat.toUpperCase()}
@@ -90,24 +165,38 @@ function App() {
         </header>
 
         <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 pb-5">
-          {productosVisibles.map((p) => (
-            <ProductCard
-              key={p.id}
-              producto={p}
-              onAgregar={agregarAlCarrito}
-              onVerDetalle={(prod) => setProductoSeleccionado(prod)}
-            />
-          ))}
+          {productosVisibles.length > 0 ? (
+            productosVisibles.map((p) => (
+              <ProductCard
+                key={p.id}
+                producto={p}
+                onAgregar={agregarAlCarrito}
+                onVerDetalle={setProductoSeleccionado}
+              />
+            ))
+          ) : (
+            <div className="col-12 text-center py-5 animate-fade-up">
+              <div
+                className="bg-white premium-card p-5 d-inline-block shadow-sm"
+                style={{ maxWidth: "400px" }}
+              >
+                <Search size={40} className="text-muted mb-3 opacity-30" />
+                <h5 className="fw-bold">No hay resultados</h5>
+                <p className="text-muted small mb-0">
+                  Intenta con otros términos o cambia la categoría.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
-
         <Pagination
           paginaActual={paginaActual}
           totalPaginas={totalPaginas}
           setPaginaActual={setPaginaActual}
         />
       </main>
+      <Footer />
     </div>
   );
 }
-
 export default App;
