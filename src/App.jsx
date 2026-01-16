@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./components/Navbar";
-import ProductCard from "./components/ProductCard";
-import Cart from "./components/Cart";
-import ProductDetail from "./components/ProductDetail";
-import Pagination from "./components/Pagination";
-import Footer from "./components/Footer";
+import Navbar from "./Components/Navbar";
+import ProductCard from "./Components/ProductCard";
+import Cart from "./Components/Cart";
+import ProductDetail from "./Components/ProductDetail";
+import Pagination from "./Components/Pagination";
+import Footer from "./Components/Footer";
 import { Search } from "lucide-react";
 import { productos } from "./productos";
 
