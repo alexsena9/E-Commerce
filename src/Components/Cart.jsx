@@ -28,10 +28,10 @@ const Cart = ({ items, onRemove, onFinalizar }) => {
             </div>
             <h5 className="fw-bold">Tu carrito está vacío</h5>
             <p className="text-muted small px-3">
-              Explora nuestra colección y encuentra algo increíble para ti.
+              Encuentra los mejores productos tecnológicos en nuestra tienda.
             </p>
             <button
-              className="btn-dark-premium mt-3 w-100"
+              className="btn btn-dark mt-3 rounded-pill px-4"
               data-bs-dismiss="offcanvas"
             >
               EMPEZAR A COMPRAR
@@ -48,7 +48,7 @@ const Cart = ({ items, onRemove, onFinalizar }) => {
                   <img
                     src={item.imagen}
                     alt={item.nombre}
-                    className="rounded-3"
+                    className="rounded-3 shadow-sm"
                     style={{
                       width: "60px",
                       height: "60px",
@@ -68,13 +68,14 @@ const Cart = ({ items, onRemove, onFinalizar }) => {
                 </div>
               ))}
             </div>
+
             <div className="mt-auto border-top pt-4">
               <div className="d-flex justify-content-between mb-4">
                 <span className="fw-bold text-muted">TOTAL</span>
                 <span className="fw-bold h4 mb-0">${total}</span>
               </div>
               <button
-                className="btn-dark-premium w-100 d-flex align-items-center justify-content-center gap-2 py-3"
+                className="btn btn-dark w-100 d-flex align-items-center justify-content-center gap-2 py-3 rounded-4 shadow"
                 onClick={onFinalizar}
               >
                 <Send size={18} /> FINALIZAR COMPRA
@@ -86,4 +87,5 @@ const Cart = ({ items, onRemove, onFinalizar }) => {
     </div>
   );
 };
+
 export default Cart;

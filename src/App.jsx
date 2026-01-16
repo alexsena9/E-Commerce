@@ -13,7 +13,7 @@ function App() {
     try {
       const saved = localStorage.getItem("alexis_studio_cart");
       return saved ? JSON.parse(saved) : [];
-    } catch (error) {
+    } catch (e) {
       return [];
     }
   });
@@ -36,7 +36,7 @@ function App() {
     (p) => categoriaActiva === "Todos" || p.categoria === categoriaActiva
   );
 
-  const totalPaginas = Math.ceil(productosFiltrados.length / 12);
+  const totalPaginas = Math.ceil(productosFiltrados.length / 12) || 1;
 
   const productosVisibles = productosFiltrados.slice(
     (paginaActual - 1) * 12,
@@ -46,6 +46,7 @@ function App() {
   const agregarAlCarrito = (p) => setCarrito([...carrito, p]);
   const eliminarDelCarrito = (i) =>
     setCarrito(carrito.filter((_, idx) => idx !== i));
+
   const finalizarCompra = () => {
     setCompraExitosa(true);
     setCarrito([]);
@@ -59,41 +60,20 @@ function App() {
 
   if (compraExitosa) {
     return (
-      <div
-        className="min-vh-100 d-flex align-items-center justify-content-center"
-        style={{ backgroundColor: "#f3f4f6" }}
-      >
+      <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
         <div
-          className="premium-card p-5 text-center shadow-lg animate-fade-up"
+          className="bg-white p-5 text-center shadow-lg rounded-4 animate-fade-up"
           style={{ maxWidth: "450px" }}
         >
-          <div
-            className="mb-4 d-inline-flex align-items-center justify-content-center rounded-circle bg-light"
-            style={{
-              width: "80px",
-              height: "80px",
-              border: "2px solid #10b981",
-            }}
-          >
-            <svg
-              width="30"
-              height="30"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#10b981"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
+          <div className="mb-4 text-success">
+            <Search size={60} strokeWidth={1} />
           </div>
           <h2 className="fw-bold mb-3">¡PEDIDO RECIBIDO!</h2>
           <p className="text-muted mb-4">
             Gracias por tu compra. Nos comunicaremos contigo a la brevedad.
           </p>
           <button
-            className="btn-dark-premium w-100"
+            className="btn btn-dark w-100 py-3 rounded-pill fw-bold"
             onClick={() => setCompraExitosa(false)}
           >
             VOLVER A LA TIENDA
@@ -104,10 +84,7 @@ function App() {
   }
 
   return (
-    <div
-      className="min-vh-100 d-flex flex-column"
-      style={{ backgroundColor: "#f3f4f6" }}
-    >
+    <div className="min-vh-100 d-flex flex-column bg-light">
       <Navbar
         cuentaCarrito={carrito.length}
         busqueda={busqueda}
@@ -118,6 +95,7 @@ function App() {
           setBusqueda("");
         }}
       />
+
       <Cart
         items={carrito}
         onRemove={eliminarDelCarrito}
@@ -134,10 +112,7 @@ function App() {
 
       <main className="container pt-5 mt-5 flex-grow-1">
         <header className="py-5 text-center">
-          <h1
-            className="fw-bold text-dark display-5"
-            style={{ letterSpacing: "-2px" }}
-          >
+          <h1 className="fw-bold display-5" style={{ letterSpacing: "-2px" }}>
             ALEXIS<span className="fw-light text-muted">STUDIO</span>
           </h1>
           <div className="d-flex flex-wrap justify-content-center gap-2 mt-4">
@@ -152,10 +127,8 @@ function App() {
               <button
                 key={cat}
                 onClick={() => setCategoriaActiva(cat)}
-                className={`btn rounded-pill px-4 py-2 small fw-bold transition-all border-0 shadow-sm ${
-                  categoriaActiva === cat
-                    ? "btn-dark text-white"
-                    : "bg-white text-muted"
+                className={`btn rounded-pill px-4 py-2 small fw-bold shadow-sm border-0 ${
+                  categoriaActiva === cat ? "btn-dark" : "bg-white text-muted"
                 }`}
               >
                 {cat.toUpperCase()}
@@ -176,19 +149,17 @@ function App() {
             ))
           ) : (
             <div className="col-12 text-center py-5 animate-fade-up">
-              <div
-                className="bg-white premium-card p-5 d-inline-block shadow-sm"
-                style={{ maxWidth: "400px" }}
-              >
+              <div className="bg-white p-5 d-inline-block rounded-4 shadow-sm">
                 <Search size={40} className="text-muted mb-3 opacity-30" />
-                <h5 className="fw-bold">No hay resultados</h5>
+                <h5 className="fw-bold">No hay coincidencias</h5>
                 <p className="text-muted small mb-0">
-                  Intenta con otros términos o cambia la categoría.
+                  Intenta con otros términos o categorías.
                 </p>
               </div>
             </div>
           )}
         </div>
+
         <Pagination
           paginaActual={paginaActual}
           totalPaginas={totalPaginas}
@@ -199,4 +170,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
