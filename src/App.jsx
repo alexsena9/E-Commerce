@@ -5,6 +5,7 @@ import Cart from "./Components/Cart";
 import ProductDetail from "./Components/ProductDetail";
 import Pagination from "./Components/Pagination";
 import Footer from "./Components/Footer";
+import WappFloat from "./Components/WappFloat";
 import { Search } from "lucide-react";
 import { productos } from "./productos";
 
@@ -29,18 +30,18 @@ function App() {
   }, [carrito]);
 
   const productosSugeridos = productos.filter((p) =>
-    p.nombre.toLowerCase().includes(busqueda.toLowerCase())
+    p.nombre.toLowerCase().includes(busqueda.toLowerCase()),
   );
 
   const productosFiltrados = productosSugeridos.filter(
-    (p) => categoriaActiva === "Todos" || p.categoria === categoriaActiva
+    (p) => categoriaActiva === "Todos" || p.categoria === categoriaActiva,
   );
 
   const totalPaginas = Math.ceil(productosFiltrados.length / 12) || 1;
 
   const productosVisibles = productosFiltrados.slice(
     (paginaActual - 1) * 12,
-    paginaActual * 12
+    paginaActual * 12,
   );
 
   const agregarAlCarrito = (p) => setCarrito([...carrito, p]);
@@ -138,26 +139,14 @@ function App() {
         </header>
 
         <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 pb-5">
-          {productosVisibles.length > 0 ? (
-            productosVisibles.map((p) => (
-              <ProductCard
-                key={p.id}
-                producto={p}
-                onAgregar={agregarAlCarrito}
-                onVerDetalle={setProductoSeleccionado}
-              />
-            ))
-          ) : (
-            <div className="col-12 text-center py-5 animate-fade-up">
-              <div className="bg-white p-5 d-inline-block rounded-4 shadow-sm">
-                <Search size={40} className="text-muted mb-3 opacity-30" />
-                <h5 className="fw-bold">No hay coincidencias</h5>
-                <p className="text-muted small mb-0">
-                  Intenta con otros términos o categorías.
-                </p>
-              </div>
-            </div>
-          )}
+          {productosVisibles.map((p) => (
+            <ProductCard
+              key={p.id}
+              producto={p}
+              onAgregar={agregarAlCarrito}
+              onVerDetalle={setProductoSeleccionado}
+            />
+          ))}
         </div>
 
         <Pagination
@@ -166,7 +155,10 @@ function App() {
           setPaginaActual={setPaginaActual}
         />
       </main>
+
       <Footer />
+
+      <WappFloat />
     </div>
   );
 }
