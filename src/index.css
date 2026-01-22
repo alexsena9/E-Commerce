@@ -109,11 +109,6 @@ footer ul li:hover {
   animation: pulse-wapp 2s infinite;
 }
 
-.wapp-floating-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-}
-
 .wapp-tooltip {
   position: absolute;
   right: 75px;
@@ -157,4 +152,31 @@ footer ul li:hover {
   .wapp-tooltip {
     display: none;
   }
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.hover-bg-light:hover {
+  background-color: #f8f9fa;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[style*="cursor: pointer"] {
+  user-select: none;
 }

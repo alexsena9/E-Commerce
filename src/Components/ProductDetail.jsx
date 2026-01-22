@@ -11,16 +11,12 @@ const ProductDetail = ({ producto, onClose, onAgregar }) => {
         zIndex: 2000,
         backgroundColor: "rgba(0,0,0,0.6)",
         backdropFilter: "blur(8px)",
-        transition: "all 0.3s ease",
       }}
       onClick={onClose}
     >
       <div
         className="bg-white rounded-5 overflow-hidden shadow-lg w-100"
-        style={{
-          maxWidth: "750px",
-          animation: "fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-        }}
+        style={{ maxWidth: "750px" }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="row g-0">
@@ -29,73 +25,70 @@ const ProductDetail = ({ producto, onClose, onAgregar }) => {
               src={producto.imagen}
               alt={producto.nombre}
               className="w-100 h-100 object-fit-cover"
-              style={{ minHeight: "350px" }}
+              style={{ minHeight: "400px" }}
             />
           </div>
 
-          <div className="col-md-7 p-4 p-lg-4 position-relative d-flex flex-column justify-content-center">
+          <div className="col-md-7 p-4 p-md-5 position-relative">
             <button
               onClick={onClose}
-              className="btn btn-light rounded-circle position-absolute top-0 end-0 m-3 shadow-sm border-0"
-              style={{
-                width: "35px",
-                height: "35px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+              className="btn border-0 position-absolute top-0 end-0 m-3 text-muted"
             >
-              <X size={18} />
+              <X size={24} />
             </button>
 
-            <div className="pe-4">
+            <div className="d-flex align-items-center gap-2 mb-2">
               <span
-                className="text-muted small text-uppercase tracking-widest"
+                className="badge bg-light text-muted rounded-pill px-3 py-1 fw-bold"
                 style={{ fontSize: "0.65rem" }}
               >
-                {producto.categoria}
+                {producto.categoria.toUpperCase()}
               </span>
-              <h3
-                className="fw-bold text-dark mt-1 mb-2"
-                style={{ fontSize: "1.5rem" }}
-              >
-                {producto.nombre}
-              </h3>
-              <h4 className="text-primary fw-bold mb-3">${producto.precio}</h4>
-
-              <p className="text-muted mb-4 small lh-base">
-                Experimenta la excelencia con el modelo{" "}
-                <strong>{producto.nombre}</strong>. Diseñado para ofrecer
-                rendimiento y un estilo minimalista único en su clase.
-              </p>
-
-              <div className="d-flex flex-column gap-2 mb-4">
-                <div
-                  className="d-flex align-items-center gap-2 text-success"
-                  style={{ fontSize: "0.75rem" }}
-                >
-                  <Truck size={14} /> <span>Envío priority gratis</span>
-                </div>
-                <div
-                  className="d-flex align-items-center gap-2 text-muted"
-                  style={{ fontSize: "0.75rem" }}
-                >
-                  <ShieldCheck size={14} /> <span>Garantía Alexis Studio</span>
-                </div>
-              </div>
-
-              <button
-                onClick={() => {
-                  onAgregar(producto);
-                  onClose();
-                }}
-                className="btn btn-dark w-100 py-2.5 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm border-0"
-                style={{ fontSize: "0.9rem" }}
-              >
-                <ShoppingCart size={18} />
-                AÑADIR AL CARRITO
-              </button>
             </div>
+
+            <h2 className="fw-black mb-1" style={{ letterSpacing: "-1px" }}>
+              {producto.nombre}
+            </h2>
+            <h3 className="text-primary fw-black mb-4">${producto.precio}</h3>
+
+            <p className="text-muted mb-4 small lh-base">
+              Experimenta la excelencia con el modelo{" "}
+              <strong>{producto.nombre}</strong>. Tecnología de vanguardia
+              diseñada para ofrecer un rendimiento superior y estilo
+              minimalista.
+            </p>
+
+            <div className="d-flex flex-column gap-3 mb-5">
+              <div
+                className={`d-flex align-items-center gap-3 ${producto.precio >= 500 ? "text-success" : "text-muted opacity-50"}`}
+                style={{ fontSize: "0.8rem" }}
+              >
+                <Truck size={18} />
+                <span className="fw-bold">
+                  {producto.precio >= 500
+                    ? "Envío Priority Gratis"
+                    : "Envío Standard: $15"}
+                </span>
+              </div>
+              <div
+                className="d-flex align-items-center gap-3 text-dark"
+                style={{ fontSize: "0.8rem" }}
+              >
+                <ShieldCheck size={18} />
+                <span className="fw-bold">Garantía oficial 12 meses</span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                onAgregar(producto);
+                onClose();
+              }}
+              className="btn btn-dark w-100 py-3 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm border-0"
+            >
+              <ShoppingCart size={20} />
+              AÑADIR AL CARRITO
+            </button>
           </div>
         </div>
       </div>

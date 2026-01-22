@@ -120,7 +120,7 @@ function App() {
         />
       )}
 
-      <main className="flex-grow-1" style={{ marginTop: "80px" }}>
+      <main className="flex-grow-1" style={{ marginTop: "110px" }}>
         <header className="py-5 text-center bg-white border-bottom border-light">
           <div className="container">
             <h1
@@ -153,13 +153,18 @@ function App() {
 
         <div className="container mt-5">
           <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 pb-5">
-            {productosVisibles.map((p) => (
-              <ProductCard
+            {productosVisibles.map((p, index) => (
+              <div
                 key={p.id}
-                producto={p}
-                onAgregar={agregarAlCarrito}
-                onVerDetalle={setProductoSeleccionado}
-              />
+                className="product-item"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <ProductCard
+                  producto={p}
+                  onAgregar={agregarAlCarrito}
+                  onVerDetalle={setProductoSeleccionado}
+                />
+              </div>
             ))}
           </div>
           <Pagination
@@ -177,7 +182,9 @@ function App() {
         >
           <div className="bg-dark text-white px-4 py-3 rounded-pill shadow-lg animate-fade-up d-flex align-items-center gap-3">
             <ShoppingBag size={18} className="text-primary" />
-            <span className="small fw-bold">PRODUCTO AÑADIDO</span>
+            <span className="small fw-bold tracking-wider">
+              PRODUCTO AÑADIDO
+            </span>
           </div>
         </div>
       )}
