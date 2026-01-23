@@ -20,10 +20,10 @@ const ProductCard = ({ producto, onAgregar, onVerDetalle }) => {
 
   return (
     <div className="card h-100 border-0 shadow-sm hover-card overflow-hidden bg-white rounded-4">
-      <div className="position-relative overflow-hidden">
+      <div className="position-relative overflow-hidden group">
         {badge && (
           <div
-            className={`position-absolute top-0 start-0 m-3 z-3 d-flex align-items-center gap-1 px-2 py-1 rounded-pill text-white fw-black ${badge.class}`}
+            className={`position-absolute top-0 start-0 m-3 z-3 d-flex align-items-center gap-1 px-2 py-1 rounded-pill text-white fw-black shadow-sm ${badge.class}`}
             style={{ fontSize: "0.65rem" }}
           >
             {badge.icon} {badge.text}
@@ -36,7 +36,7 @@ const ProductCard = ({ producto, onAgregar, onVerDetalle }) => {
         >
           <img
             src={producto.imagen}
-            className="w-100 h-100 object-fit-cover"
+            className="w-100 h-100 object-fit-cover transition-transform duration-500"
             alt={producto.nombre}
             onError={(e) => {
               e.target.onerror = null;
@@ -75,7 +75,15 @@ const ProductCard = ({ producto, onAgregar, onVerDetalle }) => {
 
         <h6
           className="card-title fw-bold text-dark mb-2 text-truncate-2"
-          style={{ fontSize: "0.85rem", height: "2.4rem" }}
+          style={{
+            fontSize: "0.85rem",
+            height: "2.4rem",
+            lineHeight: "1.2rem",
+            display: "-webkit-box",
+            WebkitLineClamp: "2",
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
         >
           {producto.nombre}
         </h6>

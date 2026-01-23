@@ -1,9 +1,34 @@
-import React from "react";
-import { Menu, Search, ShoppingBag } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Menu, Search, ShoppingBag, ArrowRight } from "lucide-react";
 
-const Navbar = ({ cuentaCarrito, busqueda, setBusqueda }) => {
+const Navbar = ({
+  cuentaCarrito,
+  busqueda,
+  setBusqueda,
+  productos,
+  onVerDetalle,
+}) => {
+  const [sugerencias, setSugerencias] = useState([]);
+  const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
+
+  useEffect(() => {
+    if (busqueda.length > 1) {
+      const filtrados = productos
+        .filter((p) => p.nombre.toLowerCase().includes(busqueda.toLowerCase()))
+        .slice(0, 5);
+      setSugerencias(filtrados);
+      setMostrarSugerencias(true);
+    } else {
+      setSugerencias([]);
+      setMostrarSugerencias(false);
+    }
+  }, [busqueda, productos]);
+
   return (
-    <nav className="navbar fixed-top bg-white border-bottom py-3 shadow-sm">
+    <nav
+      className="navbar fixed-top bg-white border-bottom py-3 shadow-sm"
+      style={{ zIndex: 1050 }}
+    >
       <div className="container">
         <div className="d-flex align-items-center gap-3">
           <button
@@ -21,7 +46,7 @@ const Navbar = ({ cuentaCarrito, busqueda, setBusqueda }) => {
         </div>
 
         <div
-          className="flex-grow-1 mx-4 d-none d-md-block"
+          className="flex-grow-1 mx-4 d-none d-md-block position-relative"
           style={{ maxWidth: "450px" }}
         >
           <div className="input-group input-group-sm">
@@ -34,8 +59,63 @@ const Navbar = ({ cuentaCarrito, busqueda, setBusqueda }) => {
               placeholder="¿Qué estás buscando hoy?"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
+              onBlur={() => setTimeout(() => setMostrarSugerencias(false), 200)}
+              onFocus={() => busqueda.length > 1 && setMostrarSugerencias(true)}
             />
           </div>
+
+          {mostrarSugerencias && sugerencias.length > 0 && (
+            <div
+              className="position-absolute top-100 start-0 w-100 bg-white shadow-lg rounded-4 mt-2 overflow-hidden border border-light animate-fade-up"
+              style={{ zIndex: 1100 }}
+            >
+              <div className="p-2">
+                <label
+                  className="px-3 py-2 smaller fw-black text-muted text-uppercase"
+                  style={{ fontSize: "0.6rem" }}
+                >
+                  Sugerencias de productos
+                </label>
+                {sugerencias.map((p) => (
+                  <div
+                    key={p.id}
+                    className="d-flex align-items-center gap-3 p-2 rounded-3 hover-bg-light cursor-pointer transition-all sugerencia-item"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      onVerDetalle(p);
+                      setBusqueda(p.nombre);
+                      setMostrarSugerencias(false);
+                    }}
+                  >
+                    <img
+                      src={p.imagen}
+                      alt={p.nombre}
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        objectFit: "cover",
+                      }}
+                      className="rounded-2"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          "https://images.unsplash.com/photo-1560393464-5c69a73c5770?w=100";
+                      }}
+                    />
+                    <div className="flex-grow-1">
+                      <h6 className="mb-0 fw-bold small text-dark">
+                        {p.nombre}
+                      </h6>
+                      <span className="text-primary fw-black small">
+                        ${p.precio}
+                      </span>
+                    </div>
+                    <ArrowRight size={14} className="text-muted opacity-50" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="d-flex align-items-center gap-2">

@@ -10,7 +10,6 @@ import {
 const Cart = ({ items = [], onRemove, onFinalizar }) => {
   const [metodoPago, setMetodoPago] = useState("whatsapp");
 
-  // Cálculo del total
   const total = items.reduce((acc, item) => acc + (item?.precio || 0), 0);
 
   const procesarCompra = () => {
@@ -23,8 +22,8 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
         .join("\n");
       const mensaje = encodeURIComponent(
         `¡Hola Alexis Studio!\nHe realizado un pedido:\n\n${listaProductos}\n\nTotal: $${total.toFixed(
-          2
-        )}\n\n¿Me confirman los pasos a seguir?`
+          2,
+        )}\n\n¿Me confirman los pasos a seguir?`,
       );
 
       window.open(`https://wa.me/${numeroTelefono}?text=${mensaje}`, "_blank");
@@ -36,17 +35,18 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
       }, 1500);
     }
 
-    const instance = window.bootstrap?.Offcanvas?.getInstance(
-      document.getElementById("cartOffcanvas")
-    );
-    if (instance) instance.hide();
+    const elemento = document.getElementById("cartSidebar");
+    if (elemento && window.bootstrap) {
+      const instance = window.bootstrap.Offcanvas.getInstance(elemento);
+      if (instance) instance.hide();
+    }
   };
 
   return (
     <div
       className="offcanvas offcanvas-end bg-white border-0 shadow"
       tabIndex="-1"
-      id="cartOffcanvas"
+      id="cartSidebar"
       style={{ width: "400px", borderRadius: "2rem 0 0 2rem" }}
     >
       <div className="offcanvas-header border-bottom py-4 px-4">
@@ -63,7 +63,7 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
 
       <div className="offcanvas-body p-4 d-flex flex-column">
         {items.length === 0 ? (
-          <div className="h-100 d-flex flex-column align-items-center justify-content-center text-center animate-fade-up">
+          <div className="h-100 d-flex flex-column align-items-center justify-content-center text-center">
             <div className="mb-4 opacity-10">
               <ShoppingBag size={100} strokeWidth={1} />
             </div>
@@ -74,7 +74,6 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
             <button
               className="btn btn-dark mt-3 rounded-pill px-4 py-2 fw-bold"
               data-bs-dismiss="offcanvas"
-              style={{ letterSpacing: "1px" }}
             >
               EMPEZAR A COMPRAR
             </button>
@@ -85,7 +84,7 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
               {items.map((item, index) => (
                 <div
                   key={index}
-                  className="d-flex align-items-center mb-3 pb-3 border-bottom border-light animate-fade-up"
+                  className="d-flex align-items-center mb-3 pb-3 border-bottom border-light"
                 >
                   <img
                     src={item?.imagen}
@@ -107,7 +106,7 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
                   </div>
                   <button
                     onClick={() => onRemove(index)}
-                    className="btn btn-link text-danger p-0 opacity-50 hover-opacity-100 transition-all"
+                    className="btn btn-link text-danger p-0 opacity-50 transition-all"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -139,10 +138,7 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
                 <MessageCircle size={20} className="me-3 text-success" />
                 <div className="flex-grow-1">
                   <p className="mb-0 fw-bold small">WhatsApp</p>
-                  <p
-                    className="mb-0 smaller opacity-75"
-                    style={{ fontSize: "0.65rem" }}
-                  >
+                  <p className="mb-0" style={{ fontSize: "0.65rem" }}>
                     Coordina entrega y pago
                   </p>
                 </div>
@@ -160,10 +156,7 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
                 <CreditCard size={20} className="me-3 text-primary" />
                 <div className="flex-grow-1">
                   <p className="mb-0 fw-bold small">Pago Online</p>
-                  <p
-                    className="mb-0 smaller opacity-75"
-                    style={{ fontSize: "0.65rem" }}
-                  >
+                  <p className="mb-0" style={{ fontSize: "0.65rem" }}>
                     Tarjeta o transferencia
                   </p>
                 </div>
@@ -194,12 +187,6 @@ const Cart = ({ items = [], onRemove, onFinalizar }) => {
               ? "CONFIRMAR POR WHATSAPP"
               : "PAGAR AHORA"}
           </button>
-          <p
-            className="text-center mt-3 text-muted"
-            style={{ fontSize: "0.65rem" }}
-          >
-            🔒 Compra protegida por Alexis Studio
-          </p>
         </div>
       )}
     </div>

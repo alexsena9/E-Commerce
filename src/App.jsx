@@ -37,12 +37,6 @@ function App() {
 
   useEffect(() => {
     setPaginaActual(1);
-    // Solo intentamos cerrar el sidebar si Bootstrap está disponible y hay un cambio real
-    const elemento = document.getElementById("sidebarFiltros");
-    if (elemento && window.bootstrap) {
-      const instance = window.bootstrap.Offcanvas.getInstance(elemento);
-      if (instance) instance.hide();
-    }
   }, [busqueda, categoriaActiva, precioMax, orden]);
 
   const productosFiltrados = productos
@@ -75,7 +69,7 @@ function App() {
           style={{ maxWidth: "450px" }}
         >
           <CheckCircle size={80} className="text-success mb-4 mx-auto" />
-          <h2 className="fw-black mb-3 text-uppercase">Compra Exitosa</h2>
+          <h2 className="fw-black mb-3">PEDIDO CONFIRMADO</h2>
           <button
             className="btn btn-dark w-100 py-3 rounded-pill fw-bold"
             onClick={() => setCompraExitosa(false)}
@@ -93,6 +87,8 @@ function App() {
         cuentaCarrito={carrito.length}
         busqueda={busqueda}
         setBusqueda={setBusqueda}
+        productos={productos}
+        onVerDetalle={setProductoSeleccionado}
       />
 
       <Filters
@@ -115,15 +111,20 @@ function App() {
 
       <Cart
         items={carrito}
-        onRemove={(i) => setCarrito(carrito.filter((_, idx) => idx !== i))}
-        onFinalizar={() => setCompraExitosa(true)}
+        onRemove={(index) => setCarrito(carrito.filter((_, i) => i !== index))}
+        onFinalizar={() => {
+          setCarrito([]);
+          setCompraExitosa(true);
+        }}
       />
 
       {productoSeleccionado && (
         <ProductDetail
           producto={productoSeleccionado}
           onClose={() => setProductoSeleccionado(null)}
-          onAgregar={(p) => setCarrito([...carrito, p])}
+          onAgregar={(p) => {
+            setCarrito([...carrito, p]);
+          }}
         />
       )}
 
@@ -160,15 +161,15 @@ function App() {
           {productosFiltrados.length === 0 && (
             <div className="text-center py-5">
               <X size={50} className="text-muted mb-3 mx-auto" />
-              <h4 className="fw-bold">No hay resultados</h4>
+              <h4 className="fw-bold">Sin resultados</h4>
               <button
-                className="btn btn-dark rounded-pill mt-3"
+                className="btn btn-dark rounded-pill mt-3 px-4"
                 onClick={() => {
                   setBusqueda("");
                   setCategoriaActiva("Todos");
                 }}
               >
-                Limpiar búsqueda
+                Reiniciar tienda
               </button>
             </div>
           )}

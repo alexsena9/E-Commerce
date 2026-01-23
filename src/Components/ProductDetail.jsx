@@ -1,5 +1,5 @@
 import React from "react";
-import { X, ShoppingCart, ShieldCheck, Truck } from "lucide-react";
+import { X, ShoppingCart, ShieldCheck, Truck, Star } from "lucide-react";
 
 const ProductDetail = ({ producto, onClose, onAgregar }) => {
   if (!producto) return null;
@@ -17,24 +17,29 @@ const ProductDetail = ({ producto, onClose, onAgregar }) => {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-5 overflow-hidden shadow-lg w-100"
+        className="bg-white rounded-5 overflow-hidden shadow-lg w-100 animate-fade-up"
         style={{ maxWidth: "750px" }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="row g-0">
-          <div className="col-md-5">
+          <div className="col-md-5 bg-light d-flex align-items-center justify-content-center">
             <img
               src={producto.imagen}
               alt={producto.nombre}
               className="w-100 h-100 object-fit-cover"
               style={{ minHeight: "400px" }}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src =
+                  "https://images.unsplash.com/photo-1560393464-5c69a73c5770?w=800";
+              }}
             />
           </div>
 
           <div className="col-md-7 p-4 p-md-5 position-relative">
             <button
               onClick={onClose}
-              className="btn border-0 position-absolute top-0 end-0 m-3 text-muted"
+              className="btn border-0 position-absolute top-0 end-0 m-3 text-muted hover-scale"
             >
               <X size={24} />
             </button>
@@ -46,17 +51,28 @@ const ProductDetail = ({ producto, onClose, onAgregar }) => {
               >
                 {producto.categoria.toUpperCase()}
               </span>
+              <div className="d-flex align-items-center gap-1 text-warning ms-2">
+                <Star size={12} fill="currentColor" />
+                <span
+                  className="text-dark fw-bold"
+                  style={{ fontSize: "0.7rem" }}
+                >
+                  4.8
+                </span>
+              </div>
             </div>
 
             <h2 className="fw-black mb-1" style={{ letterSpacing: "-1px" }}>
               {producto.nombre}
             </h2>
-            <h3 className="text-primary fw-black mb-4">${producto.precio}</h3>
+            <h3 className="text-primary fw-black mb-4">
+              ${producto.precio.toLocaleString()}
+            </h3>
 
             <p className="text-muted mb-4 small lh-base">
               Experimenta la excelencia con el modelo{" "}
               <strong>{producto.nombre}</strong>. Tecnología de vanguardia
-              diseñada para ofrecer un rendimiento superior.
+              diseñada para ofrecer un rendimiento superior en cada detalle.
             </p>
 
             <div className="mb-4">
@@ -74,7 +90,10 @@ const ProductDetail = ({ producto, onClose, onAgregar }) => {
                   ¡SOLO QUEDAN {stock}!
                 </span>
               </div>
-              <div className="progress" style={{ height: "4px" }}>
+              <div
+                className="progress"
+                style={{ height: "4px", backgroundColor: "#f0f0f0" }}
+              >
                 <div
                   className="progress-bar bg-danger"
                   role="progressbar"
@@ -85,7 +104,7 @@ const ProductDetail = ({ producto, onClose, onAgregar }) => {
 
             <div className="d-flex flex-column gap-3 mb-5">
               <div
-                className={`d-flex align-items-center gap-3 ${producto.precio >= 500 ? "text-success" : "text-muted opacity-50"}`}
+                className={`d-flex align-items-center gap-3 ${producto.precio >= 500 ? "text-success" : "text-muted opacity-75"}`}
                 style={{ fontSize: "0.8rem" }}
               >
                 <Truck size={18} />
@@ -109,7 +128,7 @@ const ProductDetail = ({ producto, onClose, onAgregar }) => {
                 onAgregar(producto);
                 onClose();
               }}
-              className="btn btn-dark w-100 py-3 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm border-0"
+              className="btn btn-dark w-100 py-3 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm border-0 transition-all"
             >
               <ShoppingCart size={20} />
               AÑADIR AL CARRITO
