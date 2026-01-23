@@ -67,6 +67,13 @@ function App() {
     localStorage.removeItem("alexis_studio_cart");
   };
 
+  const irAOfertasGaming = () => {
+    setCategoriaActiva("Gaming");
+    setBusqueda("");
+    const section = document.getElementById("main-content");
+    if (section) section.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
     setPaginaActual(1);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -76,7 +83,7 @@ function App() {
     return (
       <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light px-3">
         <div
-          className="bg-white p-5 text-center shadow-lg rounded-5"
+          className="bg-white p-5 text-center shadow-lg rounded-5 animate-fade-up"
           style={{ maxWidth: "450px" }}
         >
           <div className="mb-4 text-success d-flex justify-content-center">
@@ -124,8 +131,12 @@ function App() {
         />
       )}
 
-      <main className="flex-grow-1" style={{ marginTop: "110px" }}>
-        <CountdownBanner />
+      <main
+        className="flex-grow-1"
+        style={{ marginTop: "110px" }}
+        id="main-content"
+      >
+        <CountdownBanner onAction={irAOfertasGaming} />
 
         <header className="py-5 text-center bg-white border-bottom border-light">
           <div className="container">
@@ -196,7 +207,7 @@ function App() {
           className="position-fixed bottom-0 start-50 translate-middle-x mb-5"
           style={{ zIndex: 3000 }}
         >
-          <div className="bg-dark text-white px-4 py-3 rounded-pill shadow-lg d-flex align-items-center gap-3">
+          <div className="bg-dark text-white px-4 py-3 rounded-pill shadow-lg animate-fade-up d-flex align-items-center gap-3">
             <ShoppingBag size={18} className="text-primary" />
             <span className="small fw-bold tracking-wider">
               PRODUCTO AÑADIDO

@@ -1,104 +1,132 @@
 import React from "react";
+import {
+  Facebook,
+  Instagram,
+  Twitter,
+  Youtube,
+  ShieldCheck,
+  RotateCcw,
+  Headset,
+  CreditCard,
+} from "lucide-react";
 
 const Footer = () => {
+  const trustItems = [
+    {
+      icon: <ShieldCheck size={28} />,
+      title: "PAGO SEGURO",
+      desc: "Cifrado SSL 256-bit",
+    },
+    {
+      icon: <RotateCcw size={28} />,
+      title: "DEVOLUCIONES",
+      desc: "30 días de garantía",
+    },
+    {
+      icon: <Headset size={28} />,
+      title: "SOPORTE 24/7",
+      desc: "Chat en vivo siempre",
+    },
+    {
+      icon: <CreditCard size={28} />,
+      title: "CUOTAS SIN INTERÉS",
+      desc: "Con todas las tarjetas",
+    },
+  ];
+
   return (
-    <footer className="bg-white pt-5 pb-4 border-top mt-5 shadow-sm">
-      <div className="container">
-        <div className="row gy-4 mb-5 text-center text-md-start justify-content-between">
-          <div className="col-md-2 col-6">
-            <h6
-              className="fw-bold mb-3 small text-uppercase"
-              style={{ letterSpacing: "1px" }}
-            >
-              Ayuda
-            </h6>
-            <ul className="list-unstyled d-grid gap-2 small text-muted">
-              <li>Cómo comprar</li>
-              <li>Rastrear pedido</li>
-              <li>Envíos y devoluciones</li>
-              <li>Términos y condiciones</li>
-            </ul>
-          </div>
-          <div className="col-md-2 col-6">
-            <h6
-              className="fw-bold mb-3 small text-uppercase"
-              style={{ letterSpacing: "1px" }}
-            >
-              Empresa
-            </h6>
-            <ul className="list-unstyled d-grid gap-2 small text-muted">
-              <li>Quienes somos</li>
-              <li>Sucursales</li>
-              <li>Contacto</li>
-              <li>Blog</li>
-            </ul>
-          </div>
-          <div className="col-md-2 col-6">
-            <h6
-              className="fw-bold mb-3 small text-uppercase"
-              style={{ letterSpacing: "1px" }}
-            >
-              Mi cuenta
-            </h6>
-            <ul className="list-unstyled d-grid gap-2 small text-muted">
-              <li>Mis compras</li>
-              <li>Mis direcciones</li>
-              <li>Wish List</li>
-            </ul>
-          </div>
-          <div className="col-md-2 col-6">
-            <h6
-              className="fw-bold mb-3 small text-uppercase"
-              style={{ letterSpacing: "1px" }}
-            >
-              Eventos
-            </h6>
-            <ul className="list-unstyled d-grid gap-2 small text-muted">
-              <li>Black Friday</li>
-              <li>Navidad</li>
-              <li>Ciberlunes</li>
-            </ul>
-          </div>
+    <footer className="bg-white border-top mt-5">
+      <div className="container py-5 border-bottom">
+        <div className="row g-4">
+          {trustItems.map((item, index) => (
+            <div key={index} className="col-6 col-md-3 text-center">
+              <div className="text-primary mb-3 d-flex justify-content-center">
+                {item.icon}
+              </div>
+              <h6 className="fw-black small mb-1 tracking-tighter">
+                {item.title}
+              </h6>
+              <p className="text-muted mb-0" style={{ fontSize: "0.7rem" }}>
+                {item.desc}
+              </p>
+            </div>
+          ))}
         </div>
+      </div>
 
-        <div className="border-top border-bottom py-4 mb-4">
-          <div
-            className="d-flex flex-wrap justify-content-center align-items-center gap-4 opacity-40 grayscale-filter"
-            style={{ fontSize: "0.75rem" }}
-          >
-            <span className="fw-bold">OCA</span>
-            <span className="fw-bold">VISA</span>
-            <span className="fw-bold">MASTERCARD</span>
-            <span className="fw-bold">BROU</span>
-            <span className="fw-bold">MERCADO PAGO</span>
-            <span className="fw-bold">PASS CARD</span>
-            <span className="fw-bold">ANDA</span>
-            <span className="fw-bold">ABITAB</span>
-            <span className="fw-bold">RED PAGOS</span>
-            <span className="fw-bold">BBVA</span>
-            <span className="fw-bold">SANTANDER</span>
-          </div>
-        </div>
-
-        <div
-          className="d-flex flex-column flex-md-row justify-content-between align-items-center text-muted"
-          style={{ fontSize: "0.7rem" }}
-        >
-          <div className="text-center text-md-start">
-            <p className="mb-0">© Copyright 2026 / ALEXIS STUDIO</p>
-            <p className="mb-0 opacity-50 fst-italic">
-              Hecho con ♥ para e-commerces
+      <div className="container py-5">
+        <div className="row g-4 mb-5">
+          <div className="col-lg-4 col-md-12">
+            <a
+              className="navbar-brand fw-black mb-3 d-block"
+              href="/"
+              style={{ letterSpacing: "-1.5px", fontSize: "1.4rem" }}
+            >
+              ALEXIS<span className="fw-light text-muted">STUDIO</span>
+            </a>
+            <p className="text-muted small mb-4" style={{ maxWidth: "300px" }}>
+              Líderes en tecnología y estilo de vida digital. Calidad
+              garantizada en cada producto.
             </p>
+            <div className="d-flex gap-3 text-muted">
+              <Facebook size={18} className="cursor-pointer hover-text-dark" />
+              <Instagram size={18} className="cursor-pointer hover-text-dark" />
+              <Twitter size={18} className="cursor-pointer hover-text-dark" />
+              <Youtube size={18} className="cursor-pointer hover-text-dark" />
+            </div>
           </div>
+
+          <div className="col-6 col-lg-2 col-md-4">
+            <h6 className="fw-black small mb-3">AYUDA</h6>
+            <ul className="list-unstyled text-muted small d-grid gap-2">
+              <li className="hover-text-dark cursor-pointer">Cómo comprar</li>
+              <li className="hover-text-dark cursor-pointer">
+                Envíos y devoluciones
+              </li>
+              <li className="hover-text-dark cursor-pointer">
+                Términos y condiciones
+              </li>
+            </ul>
+          </div>
+
+          <div className="col-6 col-lg-2 col-md-4">
+            <h6 className="fw-black small mb-3">EMPRESA</h6>
+            <ul className="list-unstyled text-muted small d-grid gap-2">
+              <li className="hover-text-dark cursor-pointer">Quienes somos</li>
+              <li className="hover-text-dark cursor-pointer">Sucursales</li>
+              <li className="hover-text-dark cursor-pointer">Contacto</li>
+            </ul>
+          </div>
+
+          <div className="col-6 col-lg-4 col-md-4">
+            <h6 className="fw-black small mb-3">MI CUENTA</h6>
+            <ul className="list-unstyled text-muted small d-grid gap-2">
+              <li className="hover-text-dark cursor-pointer">Mis compras</li>
+              <li className="hover-text-dark cursor-pointer">Wish List</li>
+            </ul>
+          </div>
+        </div>
+
+        <hr className="opacity-10" />
+
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-4 mt-4">
+          <p className="smaller text-muted mb-0">
+            © 2026 ALEXIS STUDIO. Todos los derechos reservados.
+          </p>
           <div
-            className="fw-bold mt-2 mt-md-0"
-            style={{ letterSpacing: "2px" }}
+            className="d-flex flex-wrap justify-content-center gap-3 opacity-50 fw-bold grayscale-filter"
+            style={{ fontSize: "0.65rem" }}
           >
-            ALEXIS<span className="fw-light">STUDIO</span>
+            <span>VISA</span>
+            <span>MASTERCARD</span>
+            <span>MERCADO PAGO</span>
+            <span>PAYPAL</span>
+            <span>TRANSFERENCIA</span>
           </div>
         </div>
       </div>
     </footer>
   );
 };
+
 export default Footer;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Timer, Zap } from "lucide-react";
+import { Timer, Zap, ArrowRight } from "lucide-react";
 
-const CountdownBanner = () => {
+const CountdownBanner = ({ onAction }) => {
   const [timeLeft, setTimeLeft] = useState({
     horas: 12,
     minutos: 45,
@@ -23,26 +23,43 @@ const CountdownBanner = () => {
   }, []);
 
   return (
-    <div className="bg-primary text-white py-3">
+    <div
+      style={{ backgroundColor: "#ff6b00" }}
+      className="text-white py-3 shadow-sm"
+    >
       <div className="container d-flex flex-column flex-md-row align-items-center justify-content-center gap-3">
         <div className="d-flex align-items-center gap-2">
-          <Zap size={20} fill="white" className="animate-pulse" />
-          <span className="fw-black tracking-tighter h5 mb-0">
-            VENTA FLASH: 30% OFF EN GAMING
+          <div className="bg-white p-1 rounded-circle">
+            <Zap
+              size={20}
+              fill="#ff6b00"
+              stroke="none"
+              className="animate-pulse"
+            />
+          </div>
+          <span className="fw-black tracking-tighter h5 mb-0 text-uppercase">
+            OFERTA RELÁMPAGO: 30% OFF EN GAMING
           </span>
         </div>
 
-        <div className="d-flex align-items-center gap-2 bg-dark bg-opacity-25 px-4 py-2 rounded-pill">
+        <div className="d-flex align-items-center gap-2 bg-black bg-opacity-25 px-4 py-2 rounded-pill border border-white border-opacity-25">
           <Timer size={18} />
-          <div className="d-flex gap-2 fw-black font-monospace">
-            <span>{String(timeLeft.horas).padStart(2, "0")}h</span>:
-            <span>{String(timeLeft.minutos).padStart(2, "0")}m</span>:
-            <span>{String(timeLeft.segundos).padStart(2, "0")}s</span>
+          <div
+            className="d-flex gap-2 fw-black font-monospace"
+            style={{ fontSize: "1.1rem" }}
+          >
+            <span>{String(timeLeft.horas).padStart(2, "0")}H</span>:
+            <span>{String(timeLeft.minutos).padStart(2, "0")}M</span>:
+            <span>{String(timeLeft.segundos).padStart(2, "0")}S</span>
           </div>
         </div>
 
-        <button className="btn btn-white btn-sm rounded-pill fw-black px-4 shadow-sm hover-scale">
-          COMPRAR AHORA
+        <button
+          onClick={onAction}
+          className="btn btn-dark rounded-pill fw-black px-5 py-2 shadow-lg hover-scale d-flex align-items-center gap-2 border-0"
+          style={{ letterSpacing: "1px", fontSize: "0.9rem" }}
+        >
+          COMPRAR AHORA <ArrowRight size={18} />
         </button>
       </div>
     </div>
