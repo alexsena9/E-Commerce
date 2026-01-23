@@ -55,8 +55,8 @@ const Footer = () => {
       </div>
 
       <div className="container py-5">
-        <div className="row g-4 mb-5">
-          <div className="col-lg-4 col-md-12">
+        <div className="row g-4 justify-content-between">
+          <div className="col-lg-4 col-md-12 text-center text-lg-start">
             <a
               className="navbar-brand fw-black mb-3 d-block"
               href="/"
@@ -64,11 +64,14 @@ const Footer = () => {
             >
               ALEXIS<span className="fw-light text-muted">STUDIO</span>
             </a>
-            <p className="text-muted small mb-4" style={{ maxWidth: "300px" }}>
+            <p
+              className="text-muted small mb-4 mx-auto mx-lg-0"
+              style={{ maxWidth: "300px" }}
+            >
               Líderes en tecnología y estilo de vida digital. Calidad
               garantizada en cada producto.
             </p>
-            <div className="d-flex gap-3 text-muted">
+            <div className="d-flex gap-3 text-muted justify-content-center justify-content-lg-start mb-4 mb-lg-0">
               <Facebook size={18} className="cursor-pointer hover-text-dark" />
               <Instagram size={18} className="cursor-pointer hover-text-dark" />
               <Twitter size={18} className="cursor-pointer hover-text-dark" />
@@ -76,7 +79,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="col-6 col-lg-2 col-md-4">
+          <div className="col-6 col-md-auto">
             <h6 className="fw-black small mb-3">AYUDA</h6>
             <ul className="list-unstyled text-muted small d-grid gap-2">
               <li className="hover-text-dark cursor-pointer">Cómo comprar</li>
@@ -89,7 +92,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="col-6 col-lg-2 col-md-4">
+          <div className="col-6 col-md-auto">
             <h6 className="fw-black small mb-3">EMPRESA</h6>
             <ul className="list-unstyled text-muted small d-grid gap-2">
               <li className="hover-text-dark cursor-pointer">Quienes somos</li>
@@ -98,7 +101,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="col-6 col-lg-4 col-md-4">
+          <div className="col-6 col-md-auto">
             <h6 className="fw-black small mb-3">MI CUENTA</h6>
             <ul className="list-unstyled text-muted small d-grid gap-2">
               <li className="hover-text-dark cursor-pointer">Mis compras</li>
@@ -107,9 +110,9 @@ const Footer = () => {
           </div>
         </div>
 
-        <hr className="opacity-10" />
+        <hr className="opacity-10 my-5" />
 
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-4 mt-4">
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-4">
           <p className="smaller text-muted mb-0">
             © 2026 ALEXIS STUDIO. Todos los derechos reservados.
           </p>

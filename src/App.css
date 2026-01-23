@@ -251,3 +251,24 @@ main {
   color: #000 !important;
   transition: color 0.2s ease;
 }
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+.navbar.fixed-top {
+  height: 70px;
+}
+
+main {
+  overflow: visible !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

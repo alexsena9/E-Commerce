@@ -1,5 +1,5 @@
 import React from "react";
-import { SlidersHorizontal } from "lucide-react";
+import { ArrowUpDown, Filter, ChevronRight } from "lucide-react";
 
 const Filters = ({
   categorias,
@@ -7,56 +7,116 @@ const Filters = ({
   setCategoria,
   precioMax,
   setPrecioMax,
+  orden,
+  setOrden,
   totalResultados,
 }) => {
+  const cerrarSidebar = () => {
+    const elemento = document.getElementById("sidebarFiltros");
+    if (elemento && window.bootstrap) {
+      const instance = window.bootstrap.Offcanvas.getInstance(elemento);
+      if (instance) instance.hide();
+    }
+  };
+
+  const seleccionarCategoria = (cat) => {
+    setCategoria(cat);
+    cerrarSidebar();
+  };
+
   return (
-    <div className="container mt-5 pt-2">
-      <div className="bg-white rounded-5 p-4 shadow-sm border border-light">
-        <div className="row align-items-center gy-4">
-          <div className="col-md-4">
-            <div className="d-flex align-items-center gap-2 mb-3">
-              <SlidersHorizontal size={16} className="text-primary" />
-              <span className="fw-bold small tracking-tighter text-uppercase">
-                Categorías
-              </span>
-            </div>
-            <div className="d-flex flex-wrap gap-2">
+    <div
+      className="offcanvas offcanvas-start border-0 shadow"
+      tabIndex="-1"
+      id="sidebarFiltros"
+      style={{ width: "320px" }}
+    >
+      <div className="offcanvas-header bg-dark text-white p-4">
+        <h5 className="offcanvas-title fw-black d-flex align-items-center gap-2">
+          <Filter size={20} /> FILTRAR
+        </h5>
+        <button
+          type="button"
+          className="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+
+      <div className="offcanvas-body p-4">
+        <div className="mb-4">
+          <label
+            className="smaller fw-black text-muted text-uppercase mb-3 d-block tracking-widest"
+            style={{ fontSize: "0.7rem" }}
+          >
+            CATEGORÍAS ({totalResultados})
+          </label>
+          <div className="d-flex flex-column gap-1">
+            <button
+              onClick={() => seleccionarCategoria("Todos")}
+              className={`btn text-start rounded-3 px-3 py-3 fw-bold border-0 transition-all ${
+                categoriaActiva === "Todos" ? "btn-dark shadow" : "btn-light"
+              }`}
+            >
+              Todos los productos
+            </button>
+            {categorias.map((cat) => (
               <button
-                onClick={() => setCategoria("Todos")}
-                className={`btn btn-sm rounded-pill px-3 fw-bold ${categoriaActiva === "Todos" ? "btn-dark" : "btn-light text-muted"}`}
+                key={cat}
+                onClick={() => seleccionarCategoria(cat)}
+                className={`btn text-start rounded-3 px-3 py-3 fw-bold border-0 transition-all d-flex align-items-center justify-content-between ${
+                  categoriaActiva === cat ? "btn-dark shadow" : "btn-light"
+                }`}
               >
-                Todos
+                {cat}
+                <ChevronRight size={16} opacity={0.5} />
               </button>
-              {categorias.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setCategoria(cat)}
-                  className={`btn btn-sm rounded-pill px-3 fw-bold ${categoriaActiva === cat ? "btn-dark" : "btn-light text-muted"}`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+            ))}
           </div>
-          <div className="col-md-4 border-start-md border-light px-md-5">
-            <div className="d-flex justify-content-between mb-2">
-              <span className="fw-bold small text-muted">PRECIO MÁXIMO</span>
-              <span className="fw-black text-primary">${precioMax}</span>
-            </div>
-            <input
-              type="range"
-              className="form-range"
-              min="0"
-              max="1500"
-              step="50"
-              value={precioMax}
-              onChange={(e) => setPrecioMax(parseInt(e.target.value))}
-            />
+        </div>
+
+        <div className="mb-4 pt-4 border-top">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <label
+              className="smaller fw-black text-muted text-uppercase tracking-widest"
+              style={{ fontSize: "0.7rem" }}
+            >
+              PRECIO MÁXIMO
+            </label>
+            <span className="fw-black text-dark">
+              ${precioMax.toLocaleString()}
+            </span>
           </div>
-          <div className="col-md-4 text-md-end border-start-md border-light">
-            <p className="text-muted small mb-0 fw-medium">Mostrando</p>
-            <h5 className="fw-black mb-0">{totalResultados} Productos</h5>
-          </div>
+          <input
+            type="range"
+            className="form-range"
+            min="0"
+            max="6000"
+            step="100"
+            value={precioMax}
+            onChange={(e) => setPrecioMax(Number(e.target.value))}
+          />
+        </div>
+
+        <div className="pt-4 border-top">
+          <label
+            className="smaller fw-black text-muted text-uppercase mb-3 d-block tracking-widest"
+            style={{ fontSize: "0.7rem" }}
+          >
+            ORDENAR POR
+          </label>
+          <select
+            className="form-select border-0 bg-light fw-bold py-3"
+            value={orden}
+            onChange={(e) => {
+              setOrden(e.target.value);
+              cerrarSidebar();
+            }}
+          >
+            <option value="recomendados">Recomendados</option>
+            <option value="precio-asc">Precio: Menor a Mayor</option>
+            <option value="precio-desc">Precio: Mayor a Menor</option>
+            <option value="nombre-az">Nombre: A-Z</option>
+          </select>
         </div>
       </div>
     </div>

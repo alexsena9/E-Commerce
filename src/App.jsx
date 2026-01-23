@@ -9,90 +9,73 @@ import WappFloat from "./Components/WappFloat";
 import Filters from "./Components/Filters";
 import Testimonials from "./Components/Testimonials";
 import Newsletter from "./Components/Newsletter";
-import FeaturedProducts from "./Components/FeaturedProducts";
 import CountdownBanner from "./Components/CountdownBanner";
-import { CheckCircle, ShoppingBag } from "lucide-react";
+import { CheckCircle, X } from "lucide-react";
 import { productos } from "./productos";
 
 function App() {
   const [carrito, setCarrito] = useState(() => {
     try {
-      const saved = localStorage.getItem("alexis_studio_cart");
+      const saved = localStorage.getItem("cart");
       return saved ? JSON.parse(saved) : [];
     } catch (e) {
       return [];
     }
   });
 
-  const [paginaActual, setPaginaActual] = useState(1);
-  const [categoriaActiva, setCategoriaActiva] = useState("Todos");
-  const [precioMax, setPrecioMax] = useState(1500);
   const [busqueda, setBusqueda] = useState("");
+  const [categoriaActiva, setCategoriaActiva] = useState("Todos");
+  const [precioMax, setPrecioMax] = useState(6000);
+  const [orden, setOrden] = useState("recomendados");
+  const [paginaActual, setPaginaActual] = useState(1);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [compraExitosa, setCompraExitosa] = useState(false);
-  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem("alexis_studio_cart", JSON.stringify(carrito));
+    localStorage.setItem("cart", JSON.stringify(carrito));
   }, [carrito]);
-
-  const productosFiltrados = productos.filter((p) => {
-    const cumpleBusqueda = p.nombre
-      .toLowerCase()
-      .includes(busqueda.toLowerCase());
-    const cumpleCategoria =
-      categoriaActiva === "Todos" || p.categoria === categoriaActiva;
-    const cumplePrecio = p.precio <= precioMax;
-    return cumpleBusqueda && cumpleCategoria && cumplePrecio;
-  });
-
-  const totalPaginas = Math.ceil(productosFiltrados.length / 12) || 1;
-  const productosVisibles = productosFiltrados.slice(
-    (paginaActual - 1) * 12,
-    paginaActual * 12,
-  );
-
-  const agregarAlCarrito = (p) => {
-    setCarrito([...carrito, p]);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 2500);
-  };
-
-  const eliminarDelCarrito = (i) =>
-    setCarrito(carrito.filter((_, idx) => idx !== i));
-
-  const finalizarCompra = () => {
-    setCompraExitosa(true);
-    setCarrito([]);
-    localStorage.removeItem("alexis_studio_cart");
-  };
-
-  const irAOfertasGaming = () => {
-    setCategoriaActiva("Gaming");
-    setBusqueda("");
-    const section = document.getElementById("main-content");
-    if (section) section.scrollIntoView({ behavior: "smooth" });
-  };
 
   useEffect(() => {
     setPaginaActual(1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [categoriaActiva, busqueda, precioMax]);
+    // Solo intentamos cerrar el sidebar si Bootstrap está disponible y hay un cambio real
+    const elemento = document.getElementById("sidebarFiltros");
+    if (elemento && window.bootstrap) {
+      const instance = window.bootstrap.Offcanvas.getInstance(elemento);
+      if (instance) instance.hide();
+    }
+  }, [busqueda, categoriaActiva, precioMax, orden]);
+
+  const productosFiltrados = productos
+    .filter((p) => {
+      const matchBusqueda = p.nombre
+        .toLowerCase()
+        .includes(busqueda.toLowerCase());
+      const matchCat =
+        categoriaActiva === "Todos" || p.categoria === categoriaActiva;
+      const matchPrecio = p.precio <= precioMax;
+      return matchBusqueda && matchCat && matchPrecio;
+    })
+    .sort((a, b) => {
+      if (orden === "precio-asc") return a.precio - b.precio;
+      if (orden === "precio-desc") return b.precio - a.precio;
+      if (orden === "nombre-az") return a.nombre.localeCompare(b.nombre);
+      return 0;
+    });
+
+  const productosVisibles = productosFiltrados.slice(
+    (paginaActual - 1) * 8,
+    paginaActual * 8,
+  );
 
   if (compraExitosa) {
     return (
-      <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light px-3">
+      <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light p-4">
         <div
-          className="bg-white p-5 text-center shadow-lg rounded-5 animate-fade-up"
+          className="bg-white p-5 text-center shadow-lg rounded-5"
           style={{ maxWidth: "450px" }}
         >
-          <div className="mb-4 text-success d-flex justify-content-center">
-            <CheckCircle size={80} strokeWidth={1.5} />
-          </div>
-          <h2 className="fw-black mb-3">¡PEDIDO RECIBIDO!</h2>
-          <p className="text-muted mb-4 fw-medium">
-            Gracias por elegir Alexis Studio. Recibirás un mensaje de WhatsApp.
-          </p>
+          <CheckCircle size={80} className="text-success mb-4 mx-auto" />
+          <h2 className="fw-black mb-3 text-uppercase">Compra Exitosa</h2>
           <button
             className="btn btn-dark w-100 py-3 rounded-pill fw-bold"
             onClick={() => setCompraExitosa(false)}
@@ -105,95 +88,94 @@ function App() {
   }
 
   return (
-    <div className="min-vh-100 d-flex flex-column bg-light">
+    <div className="bg-light min-vh-100">
       <Navbar
         cuentaCarrito={carrito.length}
         busqueda={busqueda}
         setBusqueda={setBusqueda}
-        productosSugeridos={productosFiltrados.slice(0, 5)}
-        onSeleccionarSugerencia={(p) => {
-          setProductoSeleccionado(p);
-          setBusqueda("");
-        }}
+      />
+
+      <Filters
+        categorias={[
+          "Audio",
+          "Wearables",
+          "Fotografía",
+          "Gaming",
+          "Computación",
+          "Telefonía",
+        ]}
+        categoriaActiva={categoriaActiva}
+        setCategoria={setCategoriaActiva}
+        precioMax={precioMax}
+        setPrecioMax={setPrecioMax}
+        orden={orden}
+        setOrden={setOrden}
+        totalResultados={productosFiltrados.length}
       />
 
       <Cart
         items={carrito}
-        onRemove={eliminarDelCarrito}
-        onFinalizar={finalizarCompra}
+        onRemove={(i) => setCarrito(carrito.filter((_, idx) => idx !== i))}
+        onFinalizar={() => setCompraExitosa(true)}
       />
 
       {productoSeleccionado && (
         <ProductDetail
           producto={productoSeleccionado}
           onClose={() => setProductoSeleccionado(null)}
-          onAgregar={agregarAlCarrito}
+          onAgregar={(p) => setCarrito([...carrito, p])}
         />
       )}
 
-      <main
-        className="flex-grow-1"
-        style={{ marginTop: "110px" }}
-        id="main-content"
-      >
-        <CountdownBanner onAction={irAOfertasGaming} />
+      <main style={{ paddingTop: "110px" }}>
+        <CountdownBanner onAction={() => setCategoriaActiva("Gaming")} />
 
-        <header className="py-5 text-center bg-white border-bottom border-light">
+        <header className="py-5 text-center bg-white border-bottom mb-5">
           <div className="container">
             <h1
-              className="fw-black display-4 mb-2"
-              style={{ letterSpacing: "-3px" }}
+              className="fw-black display-3 mb-0"
+              style={{ letterSpacing: "-2px" }}
             >
-              ALEXIS<span className="fw-light text-muted">STUDIO</span>
+              ALEXIS STUDIO
             </h1>
-            <p className="text-muted fw-bold small tracking-widest text-uppercase">
-              Exclusive Tech Collection
+            <p className="text-muted fw-bold small text-uppercase tracking-widest">
+              Premium Tech Store
             </p>
           </div>
         </header>
 
-        {!busqueda && categoriaActiva === "Todos" && (
-          <FeaturedProducts
-            productos={productos.filter((p) => p.precio > 400)}
-            onVerDetalle={setProductoSeleccionado}
-          />
-        )}
-
-        <Filters
-          categorias={[
-            "Audio",
-            "Wearables",
-            "Fotografía",
-            "Gaming",
-            "Computación",
-            "Telefonía",
-          ]}
-          categoriaActiva={categoriaActiva}
-          setCategoria={setCategoriaActiva}
-          precioMax={precioMax}
-          setPrecioMax={setPrecioMax}
-          totalResultados={productosFiltrados.length}
-        />
-
-        <div className="container mt-5">
-          <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4 pb-5">
-            {productosVisibles.map((p, index) => (
-              <div
-                key={p.id}
-                className="product-item"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
+        <div className="container pb-5">
+          <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+            {productosVisibles.map((p) => (
+              <div key={p.id} className="col">
                 <ProductCard
                   producto={p}
-                  onAgregar={agregarAlCarrito}
+                  onAgregar={(prod) => setCarrito([...carrito, prod])}
                   onVerDetalle={setProductoSeleccionado}
                 />
               </div>
             ))}
           </div>
+
+          {productosFiltrados.length === 0 && (
+            <div className="text-center py-5">
+              <X size={50} className="text-muted mb-3 mx-auto" />
+              <h4 className="fw-bold">No hay resultados</h4>
+              <button
+                className="btn btn-dark rounded-pill mt-3"
+                onClick={() => {
+                  setBusqueda("");
+                  setCategoriaActiva("Todos");
+                }}
+              >
+                Limpiar búsqueda
+              </button>
+            </div>
+          )}
+
           <Pagination
             paginaActual={paginaActual}
-            totalPaginas={totalPaginas}
+            totalPaginas={Math.ceil(productosFiltrados.length / 8)}
             setPaginaActual={setPaginaActual}
           />
         </div>
@@ -201,20 +183,6 @@ function App() {
         <Testimonials />
         <Newsletter />
       </main>
-
-      {showToast && (
-        <div
-          className="position-fixed bottom-0 start-50 translate-middle-x mb-5"
-          style={{ zIndex: 3000 }}
-        >
-          <div className="bg-dark text-white px-4 py-3 rounded-pill shadow-lg animate-fade-up d-flex align-items-center gap-3">
-            <ShoppingBag size={18} className="text-primary" />
-            <span className="small fw-bold tracking-wider">
-              PRODUCTO AÑADIDO
-            </span>
-          </div>
-        </div>
-      )}
 
       <Footer />
       <WappFloat />
