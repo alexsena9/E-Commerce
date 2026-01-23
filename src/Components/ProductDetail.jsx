@@ -4,6 +4,8 @@ import { X, ShoppingCart, ShieldCheck, Truck } from "lucide-react";
 const ProductDetail = ({ producto, onClose, onAgregar }) => {
   if (!producto) return null;
 
+  const stock = Math.floor(Math.random() * (12 - 2 + 1) + 2);
+
   return (
     <div
       className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center px-3"
@@ -54,9 +56,32 @@ const ProductDetail = ({ producto, onClose, onAgregar }) => {
             <p className="text-muted mb-4 small lh-base">
               Experimenta la excelencia con el modelo{" "}
               <strong>{producto.nombre}</strong>. Tecnología de vanguardia
-              diseñada para ofrecer un rendimiento superior y estilo
-              minimalista.
+              diseñada para ofrecer un rendimiento superior.
             </p>
+
+            <div className="mb-4">
+              <div className="d-flex justify-content-between align-items-center mb-1">
+                <span
+                  className="smaller fw-bold text-dark"
+                  style={{ fontSize: "0.7rem" }}
+                >
+                  STOCK DISPONIBLE
+                </span>
+                <span
+                  className="smaller fw-bold text-danger"
+                  style={{ fontSize: "0.7rem" }}
+                >
+                  ¡SOLO QUEDAN {stock}!
+                </span>
+              </div>
+              <div className="progress" style={{ height: "4px" }}>
+                <div
+                  className="progress-bar bg-danger"
+                  role="progressbar"
+                  style={{ width: `${(stock / 15) * 100}%` }}
+                ></div>
+              </div>
+            </div>
 
             <div className="d-flex flex-column gap-3 mb-5">
               <div

@@ -7,6 +7,10 @@ import Pagination from "./Components/Pagination";
 import Footer from "./Components/Footer";
 import WappFloat from "./Components/WappFloat";
 import Filters from "./Components/Filters";
+import Testimonials from "./Components/Testimonials";
+import Newsletter from "./Components/Newsletter";
+import FeaturedProducts from "./Components/FeaturedProducts";
+import CountdownBanner from "./Components/CountdownBanner";
 import { CheckCircle, ShoppingBag } from "lucide-react";
 import { productos } from "./productos";
 
@@ -72,7 +76,7 @@ function App() {
     return (
       <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light px-3">
         <div
-          className="bg-white p-5 text-center shadow-lg rounded-5 animate-fade-up"
+          className="bg-white p-5 text-center shadow-lg rounded-5"
           style={{ maxWidth: "450px" }}
         >
           <div className="mb-4 text-success d-flex justify-content-center">
@@ -121,6 +125,8 @@ function App() {
       )}
 
       <main className="flex-grow-1" style={{ marginTop: "110px" }}>
+        <CountdownBanner />
+
         <header className="py-5 text-center bg-white border-bottom border-light">
           <div className="container">
             <h1
@@ -134,6 +140,13 @@ function App() {
             </p>
           </div>
         </header>
+
+        {!busqueda && categoriaActiva === "Todos" && (
+          <FeaturedProducts
+            productos={productos.filter((p) => p.precio > 400)}
+            onVerDetalle={setProductoSeleccionado}
+          />
+        )}
 
         <Filters
           categorias={[
@@ -173,6 +186,9 @@ function App() {
             setPaginaActual={setPaginaActual}
           />
         </div>
+
+        <Testimonials />
+        <Newsletter />
       </main>
 
       {showToast && (
@@ -180,7 +196,7 @@ function App() {
           className="position-fixed bottom-0 start-50 translate-middle-x mb-5"
           style={{ zIndex: 3000 }}
         >
-          <div className="bg-dark text-white px-4 py-3 rounded-pill shadow-lg animate-fade-up d-flex align-items-center gap-3">
+          <div className="bg-dark text-white px-4 py-3 rounded-pill shadow-lg d-flex align-items-center gap-3">
             <ShoppingBag size={18} className="text-primary" />
             <span className="small fw-bold tracking-wider">
               PRODUCTO AÑADIDO

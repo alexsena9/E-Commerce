@@ -1,59 +1,49 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+body {
+  background-color: #f8f9fa;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.5) 0, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(220, 220, 220, 0.2) 0, transparent 50%);
+  color: #212529;
+  overflow-x: hidden;
 }
 
 .card {
-  padding: 2em;
+  background-color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.03) !important;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-.read-the-docs {
-  color: #888;
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05) !important;
 }
 
-.animate-bounce-short {
-  animation: bounce 0.4s ease;
+.img-zoom-container {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #f1f1f1;
+  overflow: hidden;
 }
 
-@keyframes bounce {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.3);
-  }
+.img-zoom-container img {
+  transition: transform 0.5s ease;
 }
+
+.hover-card:hover .img-zoom-container img {
+  transform: scale(1.1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.15);
+  transition: transform 0.2s ease;
+}
+
+.product-item {
+  opacity: 0;
+  animation: fadeInUpStaggered 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 @keyframes fadeInUpStaggered {
   from {
     opacity: 0;
@@ -63,11 +53,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.product-item {
-  opacity: 0;
-  animation: fadeInUpStaggered 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes bounceBadge {
@@ -84,7 +69,117 @@
   animation: bounceBadge 0.4s ease-out;
 }
 
-.hover-scale:hover {
+.wapp-floating-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #25d366;
+  color: white;
+  border-radius: 50px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-decoration: none;
+  animation: pulse-wapp 2s infinite;
+}
+
+.wapp-floating-button:hover {
+  width: 220px;
   transform: scale(1.05);
+}
+
+.wapp-tooltip {
+  position: absolute;
+  right: 65px;
+  white-space: nowrap;
+  background-color: #212529;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  transform: translateX(10px);
+}
+
+.wapp-floating-button:hover .wapp-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+@keyframes pulse-wapp {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.hover-bg-light:hover {
+  background-color: #f8f9fa;
+}
+
+[style*="cursor: pointer"] {
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .wapp-floating-button:hover {
+    width: 60px;
+  }
+  .wapp-tooltip {
+    display: none;
+  }
+}
+
+.btn-white {
+  background-color: white !important;
+  border: none;
   transition: all 0.3s ease;
+}
+
+.btn-white:hover {
+  transform: scale(1.1);
+  background-color: #f8f9fa !important;
+}
+
+@keyframes pulse-zap {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pulse {
+  animation: pulse-zap 1.5s infinite ease-in-out;
+}
+
+.font-monospace {
+  font-family: "Courier New", Courier, monospace;
 }
